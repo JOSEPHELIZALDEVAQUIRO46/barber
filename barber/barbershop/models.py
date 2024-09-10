@@ -1,3 +1,5 @@
+# barbershop/models.py
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -29,6 +31,7 @@ class Servicio(models.Model):
     descripcion = models.TextField()
     duracion_estimada = models.DurationField()
     precio = models.DecimalField(max_digits=8, decimal_places=2)
+    imagen = models.ImageField(upload_to='servicios/', null=True, blank=True)  # Nueva línea
 
     def __str__(self):
         return self.nombre
@@ -69,12 +72,14 @@ class Pago(models.Model):
         return f"Pago de {self.cliente.get_full_name()} a {self.barbero.usuario.get_full_name()}"
 
 class BarberFace(models.Model):
-    cliente = models.ForeignKey(User, on_delete=models.CASCADE)
+    barbero = models.ForeignKey(Barbero, on_delete=models.CASCADE, null=True, blank=True)  # Permite nulos temporalmente
     imagen_rostro = models.ImageField(upload_to='barberface/')
     fecha_escaneo = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"BarberFace de {self.cliente.get_full_name()}"
+        if self.barbero:
+            return f"BarberFace de {self.barbero.usuario.get_full_name()}"
+        return "BarberFace sin barbero asignado"
 
 class EstilosSugeridos(models.Model):
     barberface = models.ForeignKey(BarberFace, on_delete=models.CASCADE)
@@ -82,7 +87,7 @@ class EstilosSugeridos(models.Model):
     porcentaje_coincidencia = models.FloatField()
 
     def __str__(self):
-        return f"Sugerencia para {self.barberface.cliente.get_full_name()}"
+        return f"Sugerencia para {self.barberface.barbero.usuario.get_full_name()}"
 
 class RankingBarberos(models.Model):
     barbero = models.OneToOneField(Barbero, on_delete=models.CASCADE)
@@ -103,29 +108,6 @@ class Contabilidad(models.Model):
     def __str__(self):
         return f"Contabilidad de {self.barberia.nombre} - {self.fecha}"
 
-class DetalleContabilidad(models.Model):
-    TIPOS = [
-        ('ingreso', 'Ingreso'),
-        ('gasto', 'Gasto'),
-    ]
-    registro = models.ForeignKey(Contabilidad, on_delete=models.CASCADE)
-    barbero = models.ForeignKey(Barbero, on_delete=models.CASCADE, null=True, blank=True)
-    monto = models.DecimalField(max_digits=8, decimal_places=2)
-    tipo = models.CharField(max_length=10, choices=TIPOS)
-    concepto = models.CharField(max_length=200)
-
-    def __str__(self):
-        return f"{self.tipo.capitalize()} de {self.monto} - {self.concepto}"
-
-class Ubicacion(models.Model):
-    barberia = models.OneToOneField(Barberia, on_delete=models.CASCADE)
-    latitud = models.FloatField()
-    longitud = models.FloatField()
-    direccion_formatted = models.CharField(max_length=255)
-
-    def __str__(self):
-        return f"Ubicación de {self.barberia.nombre}"
-
 class Promociones(models.Model):
     barberia = models.ForeignKey(Barberia, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
@@ -133,6 +115,7 @@ class Promociones(models.Model):
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     descuento = models.DecimalField(max_digits=5, decimal_places=2)
+    imagen = models.ImageField(upload_to='promociones/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.titulo} - {self.barberia.nombre}"
