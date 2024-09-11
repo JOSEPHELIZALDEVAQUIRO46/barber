@@ -1,0 +1,26 @@
+{% extends 'barbershop/base.html' %}
+
+{% block title %}Promociones - Barber Face{% endblock %}
+
+{% block content %}
+<h1 class="mt-4">Promociones</h1>
+<div class="row">
+    {% for promocion in promociones %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% if promocion.imagen %}
+            <img src="{{ promocion.imagen.url }}" class="card-img-top" alt="{{ promocion.titulo }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ promocion.titulo }}</h5>
+                <p class="card-text">{{ promocion.descripcion }}</p>
+                <p class="card-text"><small class="text-muted">Válido hasta: {{ promocion.fecha_fin }}</small></p>
+                <a href="#" class="btn btn-primary">Editar</a>
+                <a href="#" class="btn btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<a href="#" class="btn btn-success">Añadir Promoción</a>
+{% endblock %}

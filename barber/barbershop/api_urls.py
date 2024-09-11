@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import BarberiaViewSet, BarberoViewSet, ServicioViewSet, CatalogoCortesViewSet, PromocionesViewSet
+from .api_views import BarberiaViewSet, BarberoViewSet, ServicioViewSet, CatalogoCortesViewSet, PromocionesViewSet
 
 router = DefaultRouter()
 router.register(r'barberias', BarberiaViewSet)

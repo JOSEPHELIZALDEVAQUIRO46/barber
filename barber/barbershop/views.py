@@ -1,43 +1,40 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Barberia, Barbero, Servicio, Promociones
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 def home(request):
-    barberias = Barberia.objects.all()
-    return render(request, 'barbershop/home.html', {'barberias': barberias})
+    return render(request, 'barbershop/home.html')
 
-def barbero_list(request, barberia_id):
-    barberia = get_object_or_404(Barberia, id=barberia_id)
-    barberos = Barbero.objects.filter(barberia=barberia)
-    return render(request, 'barbershop/barbero_list.html', {'barberia': barberia, 'barberos': barberos})
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+    return render(request, 'barbershop/login.html')
 
+@login_required
+def dashboard(request):
+    return render(request, 'barbershop/dashboard.html')
+
+@login_required
+def barberias(request):
+    return render(request, 'barbershop/barberias.html')
+
+@login_required
+def barberos(request):
+    return render(request, 'barbershop/barberos.html')
+
+@login_required
 def servicios(request):
-    servicios_list = Servicio.objects.all()
-    return render(request, 'barbershop/servicios.html', {'servicios': servicios_list})
+    return render(request, 'barbershop/servicios.html')
 
+@login_required
+def contabilidad(request):
+    return render(request, 'barbershop/contabilidad.html')
+
+@login_required
 def promociones(request):
-    promociones_list = Promociones.objects.all()
-    return render(request, 'barbershop/promociones.html', {'promociones': promociones_list})
-
-from rest_framework import viewsets
-from .models import Barberia, Barbero, Servicio, CatalogoCortes, Promociones
-from .serializers import BarberiaSerializer, BarberoSerializer, ServicioSerializer, CatalogoCortesSerializer, PromocionesSerializer
-
-class BarberiaViewSet(viewsets.ModelViewSet):
-    queryset = Barberia.objects.all()
-    serializer_class = BarberiaSerializer
-
-class BarberoViewSet(viewsets.ModelViewSet):
-    queryset = Barbero.objects.all()
-    serializer_class = BarberoSerializer
-
-class ServicioViewSet(viewsets.ModelViewSet):
-    queryset = Servicio.objects.all()
-    serializer_class = ServicioSerializer
-
-class CatalogoCortesViewSet(viewsets.ModelViewSet):
-    queryset = CatalogoCortes.objects.all()
-    serializer_class = CatalogoCortesSerializer
-
-class PromocionesViewSet(viewsets.ModelViewSet):
-    queryset = Promociones.objects.all()
-    serializer_class = PromocionesSerializer
+    return render(request, 'barbershop/promociones.html')
