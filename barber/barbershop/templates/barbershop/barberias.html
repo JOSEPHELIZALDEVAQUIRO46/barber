@@ -1,0 +1,31 @@
+{% extends 'barbershop/base.html' %}
+
+{% block title %}Barberías - Barber Face{% endblock %}
+
+{% block content %}
+<h1 class="mt-4">Barberías</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for barberia in barberias %}
+        <tr>
+            <td>{{ barberia.nombre }}</td>
+            <td>{{ barberia.direccion }}</td>
+            <td>{{ barberia.telefono }}</td>
+            <td>
+                <a href="#" class="btn btn-sm btn-primary">Editar</a>
+                <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="#" class="btn btn-success">Añadir Barbería</a>
+{% endblock %}

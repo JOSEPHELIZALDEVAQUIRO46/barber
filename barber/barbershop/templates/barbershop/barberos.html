@@ -1,0 +1,31 @@
+{% extends 'barbershop/base.html' %}
+
+{% block title %}Barberos - Barber Face{% endblock %}
+
+{% block content %}
+<h1 class="mt-4">Barberos</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Barbería</th>
+            <th>Especialidad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for barbero in barberos %}
+        <tr>
+            <td>{{ barbero.usuario.get_full_name }}</td>
+            <td>{{ barbero.barberia.nombre }}</td>
+            <td>{{ barbero.especialidad }}</td>
+            <td>
+                <a href="#" class="btn btn-sm btn-primary">Editar</a>
+                <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="#" class="btn btn-success">Añadir Barbero</a>
+{% endblock %}
