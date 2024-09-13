@@ -1,0 +1,53 @@
+{% extends 'barbershop/base.html' %}
+
+{% block title %}Perfil de Usuario - Barber Face{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Perfil de Usuario</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/150" class="rounded-circle" alt="profile picture">
+                    {% endif %}
+                    <h5 class="my-3">{{ user.get_full_name }}</h5>
+                    <p class="text-muted mb-1">{{ user.email }}</p>
+                    <p class="text-muted mb-4">{{ user.profile.phone }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Información Personal</h5>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ u_form.as_p }}
+                        {{ p_form.as_p }}
+                        <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Seguridad</h5>
+                    <a href="{% url 'change_password' %}" class="btn btn-secondary">Cambiar Contraseña</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
