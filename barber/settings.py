@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-n+@^8-e@_0hybw-$hvtb7^ck1%@ru-*)a5q-s2fagr-i_fc3gn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.142.236.95','localhost']
+ALLOWED_HOSTS = ['3.142.236.95', 'localhost']
 
 
 # Application definition
@@ -83,8 +83,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME':'barber',
         'USER':'root',
-        'PASSWORD':'tu_contraseña',
-        'HOST':'localhost',
+        'PASSWORD':'Duberney(123)',
+        'HOST':'database.cvu6so208y2g.us-east-2.rds.amazonaws.com',
         'PORT':'3306',
     }
 }
@@ -123,8 +123,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-STATIC_URL = '/staticfiles/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 
 

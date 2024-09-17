@@ -1,0 +1,26 @@
+body {
+    background-color: #f8f9fa;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.login-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+.btn-login {
+    width: 100%;
+    background-color: #d4af37;
+    border: none;
+}
+.btn-login:hover {
+    background-color: #c19d2f;
+}

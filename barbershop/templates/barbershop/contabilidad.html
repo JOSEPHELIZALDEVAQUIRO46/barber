@@ -1,38 +1,45 @@
 {% extends 'barbershop/base.html' %}
-
-{% block title %}Contabilidad - Barber Face{% endblock %}
+{% load static %}
 
 {% block content %}
-<h1 class="mt-4">Contabilidad</h1>
+<h1 class="text-center">Contabilidad</h1> <br>
+
 <div class="row">
     <div class="col-md-6">
-        <h3>Resumen</h3>
-        <table class="table table-bordered">
-            <tr>
-                <th>Ingresos Totales</th>
-                <td>${{ ingresos_totales }}</td>
-            </tr>
-            <tr>
-                <th>Gastos Totales</th>
-                <td>${{ gastos_totales }}</td>
-            </tr>
-            <tr>
-                <th>Ganancia Neta</th>
-                <td>${{ ganancia_neta }}</td>
-            </tr>
-        </table>
+        <h2>Agregar Datos Mensuales</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
     </div>
     <div class="col-md-6">
-        <h3>Gráfico de Ingresos</h3>
-        <!-- Aquí puedes añadir un gráfico usando una librería como Chart.js -->
-        <canvas id="ingresos-chart"></canvas>
+        <h2>Resumen de los Últimos 12 Meses</h2>
+        <canvas id="contabilidadChart"></canvas>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Aquí puedes añadir el código para crear el gráfico
-</script>
+<div class="mt-4">
+    <h2>Datos Recientes</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Ingresos</th>
+                <th>Gastos</th>
+                <th>Beneficio</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dato in datos %}
+            <tr>
+                <td>{{ dato.fecha|date:"F Y" }}</td>
+                <td>${{ dato.ingresos }}</td>
+                <td>${{ dato.gastos }}</td>
+                <td>${{ dato.beneficio }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

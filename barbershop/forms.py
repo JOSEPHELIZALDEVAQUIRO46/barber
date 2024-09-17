@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from .models import Profile
+from .models import Contabilidad
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
@@ -18,3 +19,11 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         super().__init__(*args, **kwargs)
         for fieldname in ['old_password', 'new_password1', 'new_password2']:
             self.fields[fieldname].widget.attrs = {'class': 'form-control'}
+
+class ContabilidadForm(forms.ModelForm):
+    class Meta:
+        model = Contabilidad
+        fields = ['fecha', 'ingresos', 'gastos']
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }

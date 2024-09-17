@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from .forms import UserUpdateForm, ProfileUpdateForm, CustomPasswordChangeForm
+from .models import Contabilidad
+from .forms import ContabilidadForm
 
 
 @login_required
@@ -74,7 +76,32 @@ def servicios(request):
 
 @login_required
 def contabilidad(request):
-    return render(request, 'barbershop/contabilidad.html')
+    if request.method == 'POST':
+        form = ContabilidadForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('contabilidad')
+    else:
+        form = ContabilidadForm()
+
+    # Obtener los últimos 12 meses de datos
+    datos = Contabilidad.objects.order_by('-fecha')[:12]
+    
+    # Preparar datos para la gráfica
+    labels = [dato.fecha.strftime('%B %Y') for dato in reversed(datos)]
+    ingresos = [float(dato.ingresos) for dato in reversed(datos)]
+    gastos = [float(dato.gastos) for dato in reversed(datos)]
+    beneficios = [float(dato.beneficio) for dato in reversed(datos)]
+
+    context = {
+        'form': form,
+        'datos': datos,
+        'labels': labels,
+        'ingresos': ingresos,
+        'gastos': gastos,
+        'beneficios': beneficios,
+    }
+    return render(request, 'barbershop/contabilidad.html', context)
 
 @login_required
 def promociones(request):
