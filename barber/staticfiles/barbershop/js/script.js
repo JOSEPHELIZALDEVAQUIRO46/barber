@@ -1,5 +1,3 @@
-console.log('Script loaded');
-
 document.getElementById('sidebarToggle').addEventListener('click', function() {
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('content').classList.toggle('active');
@@ -50,11 +48,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const navbar = document.querySelector('.navbar');
 
     if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function(e) {
-            e.preventDefault(); // Previene el comportamiento por defecto del botón
+        sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
             content.classList.toggle('active');
             navbar.classList.toggle('active');
         });
     }
 });
+

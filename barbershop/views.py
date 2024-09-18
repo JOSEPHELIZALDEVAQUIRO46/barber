@@ -58,9 +58,6 @@ def login_view(request):
             return redirect('dashboard')
     return render(request, 'barbershop/login.html')
 
-@login_required
-def dashboard(request):
-    return render(request, 'barbershop/dashboard.html')
 
 @login_required
 def barberias(request):
