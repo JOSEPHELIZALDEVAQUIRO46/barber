@@ -1,0 +1,23 @@
+{% extends 'barbershop/base.html' %}
+
+{% block title %}Actualizar Datos de Contabilidad - Barber Face{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Actualizar Datos de Contabilidad</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <a href="{% url 'contabilidad' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

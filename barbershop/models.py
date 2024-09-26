@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
+
 class Barberia(models.Model):
     nombre = models.CharField(max_length=100)
     direccion = models.TextField()
@@ -40,7 +41,6 @@ class Servicio(models.Model):
 class CatalogoCortes(models.Model):
     barbero = models.ForeignKey(Barbero, on_delete=models.CASCADE)
     nombre_estilo = models.CharField(max_length=100)
-    descripcion = models.TextField()
     imagen = models.ImageField(upload_to='catalogo_cortes/')
 
     def __str__(self):
@@ -83,3 +83,13 @@ class Promociones(models.Model):
 
     def __str__(self):
         return f"{self.titulo} - {self.barberia.nombre}"
+    
+class Cita(models.Model):
+    nombre_completo = models.CharField(max_length=255)
+    telefono = models.CharField(max_length=15)
+    fecha = models.DateField()
+    hora = models.TimeField()
+    barbero = models.ForeignKey('Barbero', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.nombre_completo} - {self.fecha} {self.hora}'

@@ -6,7 +6,7 @@ from django.contrib.auth import update_session_auth_hash
 from .forms import UserUpdateForm, ProfileUpdateForm, CustomPasswordChangeForm
 from .models import Contabilidad
 from .forms import ContabilidadForm
-
+from django.shortcuts import render, redirect, get_object_or_404
 
 @login_required
 def profile(request):
@@ -77,19 +77,20 @@ def contabilidad(request):
         form = ContabilidadForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Datos de contabilidad agregados exitosamente.')
             return redirect('contabilidad')
     else:
         form = ContabilidadForm()
 
     # Obtener los últimos 12 meses de datos
     datos = Contabilidad.objects.order_by('-fecha')[:12]
-    
+   
     # Preparar datos para la gráfica
     labels = [dato.fecha.strftime('%B %Y') for dato in reversed(datos)]
     ingresos = [float(dato.ingresos) for dato in reversed(datos)]
     gastos = [float(dato.gastos) for dato in reversed(datos)]
     beneficios = [float(dato.beneficio) for dato in reversed(datos)]
-
+    
     context = {
         'form': form,
         'datos': datos,
@@ -100,6 +101,36 @@ def contabilidad(request):
     }
     return render(request, 'barbershop/contabilidad.html', context)
 
+@login_required
+def actualizar_contabilidad(request, pk):
+    dato = get_object_or_404(Contabilidad, pk=pk)
+    if request.method == 'POST':
+        form = ContabilidadForm(request.POST, instance=dato)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Datos de contabilidad actualizados exitosamente.')
+            return redirect('contabilidad')
+    else:
+        form = ContabilidadForm(instance=dato)
+    
+    context = {
+        'form': form,
+        'dato': dato,
+    }
+    return render(request, 'barbershop/actualizar_contabilidad.html', context)
+
+@login_required
+def eliminar_contabilidad(request, pk):
+    dato = get_object_or_404(Contabilidad, pk=pk)
+    if request.method == 'POST':
+        dato.delete()
+        messages.success(request, 'Datos de contabilidad eliminados exitosamente.')
+        return redirect('contabilidad')
+    
+    context = {
+        'dato': dato,
+    }
+    return render(request, 'barbershop/eliminar_contabilidad.html', context)
 @login_required
 def promociones(request):
     return render(request, 'barbershop/promociones.html')

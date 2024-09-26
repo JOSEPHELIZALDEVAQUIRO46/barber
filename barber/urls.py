@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('barbershop.urls')),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('login')), name='logout'),
+    path('api/', include('barbershop.api_urls')),
 ]
 
 if settings.DEBUG:

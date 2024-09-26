@@ -124,10 +124,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    "/home/ubuntu/barber/barbershop/static",  # Asegúrate de que este directorio exista o elimínalo
+    os.path.join(BASE_DIR, 'static'),
 ]
 
-STATIC_ROOT = "/home/ubuntu/barber/staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -139,6 +139,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
 }
 
 from datetime import timedelta
@@ -149,7 +155,6 @@ SIMPLE_JWT = {
 }
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = 'dashboard'  
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

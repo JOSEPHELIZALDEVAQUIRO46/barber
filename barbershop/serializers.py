@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Barberia, Barbero, Servicio, CatalogoCortes, Promociones
+from .models import Barberia, Barbero, Servicio, CatalogoCortes, Promociones, Contabilidad, Cita
 
 class BarberiaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,4 +24,14 @@ class CatalogoCortesSerializer(serializers.ModelSerializer):
 class PromocionesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Promociones
+        fields = '__all__'
+
+class ContabilidadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contabilidad
+        fields = '__all__'
+
+class CitaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cita
         fields = '__all__'

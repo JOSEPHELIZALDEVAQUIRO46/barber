@@ -1,56 +1,228 @@
 {% extends 'barbershop/base.html' %}
-{% load static %}
+
+{% block title %}Contabilidad - Barber Face{% endblock %}
 
 {% block content %}
-<h1 class="text-center">Contabilidad</h1> <br>
-<div class="row">
-    <div class="col-md-6">
-        <h2>Agregar Datos Mensuales</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
+<div class="container-fluid py-4">
+    <h1 class="mb-4">Contabilidad</h1>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
     </div>
-    <div class="col-md-6">
-        <h2>Resumen de los Últimos 12 Meses</h2>
-        <canvas id="contabilidadChart"></canvas>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Agregar Datos Mensuales</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Resumen de los Últimos 12 Meses</h2>
+                    <canvas id="contabilidadChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<div class="mt-4">
-    <h2>Datos Recientes</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Ingresos</th>
-                <th>Gastos</th>
-                <th>Beneficio</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for dato in datos %}
-            <tr>
-                <td>{{ dato.fecha|date:"F Y" }}</td>
-                <td>${{ dato.ingresos }}</td>
-                <td>${{ dato.gastos }}</td>
-                <td>${{ dato.beneficio }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Datos Recientes</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Ingresos</th>
+                                    <th>Gastos</th>
+                                    <th>Beneficio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dato in datos %}
+                                <tr>
+                                    <td>{{ dato.fecha|date:"F Y" }}</td>
+                                    <td>${{ dato.ingresos }}</td>
+                                    <td>${{ dato.gastos }}</td>
+                                    <td>${{ dato.beneficio }}</td>
+                                    <td>
+                                        <a href="{% url 'actualizar_contabilidad' dato.pk %}" class="btn btn-sm btn-primary">Actualizar</a>
+                                        <a href="{% url 'eliminar_contabilidad' dato.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var labels = {{ labels|safe }};
-        var ingresos = {{ ingresos|safe }};
-        var gastos = {{ gastos|safe }};
-        var beneficios = {{ beneficios|safe }};
-        initializeContabilidadChart(labels, ingresos, gastos, beneficios);
+    window.chartData = {
+    labels: {{ labels|safe }},
+    ingresos: {{ ingresos|safe }},
+    gastos: {{ gastos|safe }},
+    beneficios: {{ beneficios|safe }}
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById('contabilidadChart');
+    if (!ctx) {
+        console.error('No se encontró el elemento canvas para el gráfico');
+        return;
+    }
+
+    var labels = window.chartData ? window.chartData.labels : [];
+    var ingresos = window.chartData ? window.chartData.ingresos : [];
+    var gastos = window.chartData ? window.chartData.gastos : [];
+    var beneficios = window.chartData ? window.chartData.beneficios : [];
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Ingresos',
+                data: ingresos,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false
+            }, {
+                label: 'Gastos',
+                data: gastos,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                fill: false
+            }, {
+                label: 'Beneficios',
+                data: beneficios,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
+});
 </script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border: none;
+        border-radius: 0.5rem;
+    }
+    .card-title {
+        color: #343a40;
+        font-weight: bold;
+    }
+    .table {
+        color: #343a40;
+    }
+    .table thead th {
+        border-top: none;
+    }
+    :root {
+        --sidebar-width: 250px;
+    }
+    body {
+        font-family: 'Arial', sans-serif;
+        overflow-x: hidden;
+    }
+    .sidebar {
+        width: var(--sidebar-width);
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #343a40;
+        padding-top: 20px;
+        color: white;
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+        transform: translateX(-100%);
+    }
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    .content {
+        transition: margin-left 0.3s ease-in-out;
+    }
+    .navbar {
+        transition: margin-left 0.3s ease-in-out;
+    }
+    .content.sidebar-active, .navbar.sidebar-active {
+        margin-left: var(--sidebar-width);
+    }
+    @media (min-width: 769px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+        .content, .navbar {
+            margin-left: 0;
+        }
+        .content.sidebar-active, .navbar.sidebar-active {
+            margin-left: var(--sidebar-width);
+        }
+    }
+    .user-profile {
+        padding: 20px;
+        border-bottom: 1px solid #495057;
+    }
+    .user-profile img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .profile-dropdown {
+        background-color: transparent;
+        border: none;
+        color: #adb5bd;
+        text-align: left;
+        width: 100%;
+        padding: 10px 15px;
+    }
+    .profile-dropdown:hover, .profile-dropdown:focus {
+        color: white;
+        background-color: #495057;
+    }
+    .profile-menu {
+        background-color: #343a40;
+        border: none;
+    }
+    .profile-menu .dropdown-item {
+        color: #adb5bd;
+    }
+    .profile-menu .dropdown-item:hover, .profile-menu .dropdown-item:focus {
+        color: white;
+        background-color: #495057;
+    }
+</style>
 {% endblock %}
