@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from .forms import UserUpdateForm, ProfileUpdateForm, CustomPasswordChangeForm
-from .models import Contabilidad
+from .models import Contabilidad, CatalogoCortes, Cita, Barbero
 from .forms import ContabilidadForm
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 @login_required
 def profile(request):
@@ -134,3 +135,57 @@ def eliminar_contabilidad(request, pk):
 @login_required
 def promociones(request):
     return render(request, 'barbershop/promociones.html')
+
+@login_required
+def catalogo_cortes(request):
+    cortes = CatalogoCortes.objects.all()
+    if request.method == 'POST':
+        form = CatalogoCorteForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Nuevo corte agregado al catálogo.')
+            return redirect('catalogo_cortes')
+    else:
+        form = CatalogoCorteForm()
+    
+    context = {
+        'cortes': cortes,
+        'form': form,
+    }
+    return render(request, 'barbershop/catalogo_cortes.html', context)
+
+@login_required
+def eliminar_corte(request, pk):
+    corte = get_object_or_404(CatalogoCortes, pk=pk)
+    if request.method == 'POST':
+        corte.delete()
+        messages.success(request, 'Corte eliminado del catálogo.')
+        return redirect('catalogo_cortes')
+    return render(request, 'barbershop/eliminar_corte.html', {'corte': corte})
+
+@login_required
+def citas(request):
+    citas_futuras = Cita.objects.filter(fecha__gte=timezone.now().date()).order_by('fecha', 'hora')
+    if request.method == 'POST':
+        form = CitaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Nueva cita agendada.')
+            return redirect('citas')
+    else:
+        form = CitaForm()
+    
+    context = {
+        'citas': citas_futuras,
+        'form': form,
+    }
+    return render(request, 'barbershop/citas.html', context)
+
+@login_required
+def eliminar_cita(request, pk):
+    cita = get_object_or_404(Cita, pk=pk)
+    if request.method == 'POST':
+        cita.delete()
+        messages.success(request, 'Cita eliminada.')
+        return redirect('citas')
+    return render(request, 'barbershop/eliminar_cita.html', {'cita': cita})

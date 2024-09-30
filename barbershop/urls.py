@@ -13,4 +13,8 @@ urlpatterns = [
     path('promociones/', views.promociones, name='promociones'),
     path('profile/', views.profile, name='profile'),
     path('profile/change-password/', views.change_password, name='change_password'),
+    path('catalogo-cortes/', views.catalogo_cortes, name='catalogo_cortes'),
+    path('catalogo-cortes/eliminar/<int:pk>/', views.eliminar_corte, name='eliminar_corte'),
+    path('citas/', views.citas, name='citas'),
+    path('citas/eliminar/<int:pk>/', views.eliminar_cita, name='eliminar_cita'),
 ]
