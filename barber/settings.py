@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-n+@^8-e@_0hybw-$hvtb7^ck1%@ru-*)a5q-s2fagr-i_fc3gn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['18.220.132.243','barberdface.website','localhost']
 
 
 # Application definition
@@ -86,8 +86,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME':'barber',
         'USER':'root',
-        'PASSWORD':'Joseph(462005)',
-        'HOST':'localhost',
+        'PASSWORD':'Duberney(123)',
+        'HOST':'database.cvu6so208y2g.us-east-2.rds.amazonaws.com',
         'PORT':'3306',
     }
 }
@@ -127,15 +127,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# URL para acceder a los archivos estáticos
 STATIC_URL = '/staticfiles/'
 
-# Carpetas de desarrollo que contienen archivos estáticos
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'barber/static'),  # Ajusta esta ruta si es necesario
+    os.path.join(BASE_DIR, 'barber/staticfiles'),  
 ]
 
-# Carpeta donde se recopilan todos los archivos estáticos al ejecutar collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, 'barber/staticfiles')
 
 
