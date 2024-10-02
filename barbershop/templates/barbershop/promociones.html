@@ -1,28 +1,46 @@
 {% extends 'barbershop/base.html' %}
-
 {% block title %}Promociones - Barber Face{% endblock %}
-
 {% block content %}
-<h1 class="mt-4">Promociones</h1>
-<div class="row">
-    {% for promocion in promociones %}
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            {% if promocion.imagen %}
-            <img src="{{ promocion.imagen.url }}" class="card-img-top" alt="{{ promocion.titulo }}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ promocion.titulo }}</h5>
-                <p class="card-text">{{ promocion.descripcion }}</p>
-                <p class="card-text"><small class="text-muted">Válido hasta: {{ promocion.fecha_fin }}</small></p>
-                <a href="#" class="btn btn-primary">Editar</a>
-                <a href="#" class="btn btn-danger">Eliminar</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+<div class="container py-4">
+    <h1 class="mb-4">Promociones</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de fin</th>
+                <th>Descuento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for promocion in promociones %}
+            <tr>
+                <td>
+                    {% if promocion.imagen %}
+                        <img src="{{ promocion.imagen.url }}" alt="{{ promocion.titulo }}" class="img-thumbnail" style="max-width: 100px;">
+                    {% else %}
+                        <span class="text-muted">Sin imagen</span>
+                    {% endif %}
+                </td>
+                <td>{{ promocion.titulo }}</td>
+                <td>{{ promocion.descripcion }}</td>
+                <td>{{ promocion.fecha_inicio }}</td>
+                <td>{{ promocion.fecha_fin }}</td>
+                <td>{{ promocion.descuento }}%</td>
+                <td>
+                    <a href="{% url 'editar_promocion' promocion.id %}" class="btn btn-sm btn-primary">Editar</a>
+                    <a href="{% url 'eliminar_promocion' promocion.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'agregar_promocion' %}" class="btn btn-success">Añadir Promoción</a>
 </div>
-<a href="#" class="btn btn-success">Añadir Promoción</a>
+
 <style>
     .card {
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);

@@ -1,0 +1,13 @@
+{% extends 'barbershop/base.html' %}
+{% block title %}Editar Promoción - Barber Face{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Editar Promoción</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{% url 'promociones' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

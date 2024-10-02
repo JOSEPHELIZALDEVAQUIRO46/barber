@@ -11,9 +11,9 @@ class BarberiaViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset.exists():
-            # Serializa todos los objetos y los empaqueta en un objeto
-            serializer = self.get_serializer(queryset, many=True)
-            return Response({"barberias": serializer.data})  # Empaqueta los resultados en una clave "barberias"
+            barberia = queryset.first()  # Devolver solo el primer objeto
+            serializer = self.get_serializer(barberia)
+            return Response(serializer.data)
         return Response({"detail": "No se encontró ninguna barbería."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, *args, **kwargs):
@@ -39,8 +39,9 @@ class BarberoViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset.exists():
-            serializer = self.get_serializer(queryset, many=True)
-            return Response({"barberos": serializer.data})  # Empaqueta los resultados en una clave "barberos"
+            barbero = queryset.first()  # Devolver solo el primer objeto
+            serializer = self.get_serializer(barbero)
+            return Response(serializer.data)
         return Response({"detail": "No se encontró ningún barbero."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, *args, **kwargs):
@@ -66,8 +67,9 @@ class ServicioViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset.exists():
-            serializer = self.get_serializer(queryset, many=True)
-            return Response({"servicios": serializer.data})  # Empaqueta los resultados en una clave "servicios"
+            servicio = queryset.first()  # Devolver solo el primer objeto
+            serializer = self.get_serializer(servicio)
+            return Response(serializer.data)
         return Response({"detail": "No se encontró ningún servicio."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, *args, **kwargs):
@@ -93,8 +95,9 @@ class CatalogoCortesViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset.exists():
-            serializer = self.get_serializer(queryset, many=True)
-            return Response({"catalogo_cortes": serializer.data})  # Empaqueta los resultados en una clave "catalogo_cortes"
+            catalogo_corte = queryset.first()  # Devolver solo el primer objeto
+            serializer = self.get_serializer(catalogo_corte)
+            return Response(serializer.data)
         return Response({"detail": "No se encontró ningún corte."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, *args, **kwargs):
@@ -120,8 +123,9 @@ class PromocionesViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset.exists():
-            serializer = self.get_serializer(queryset, many=True)
-            return Response({"promociones": serializer.data})  # Empaqueta los resultados en una clave "promociones"
+            promocion = queryset.first()  # Devolver solo el primer objeto
+            serializer = self.get_serializer(promocion)
+            return Response(serializer.data)
         return Response({"detail": "No se encontró ninguna promoción."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, *args, **kwargs):
@@ -147,8 +151,9 @@ class ContabilidadViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset.exists():
-            serializer = self.get_serializer(queryset, many=True)
-            return Response({"contabilidad": serializer.data})  # Empaqueta los resultados en una clave "contabilidad"
+            contabilidad = queryset.first()  # Devolver solo el primer objeto
+            serializer = self.get_serializer(contabilidad)
+            return Response(serializer.data)
         return Response({"detail": "No se encontró ninguna entrada de contabilidad."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, *args, **kwargs):
@@ -174,8 +179,9 @@ class CitaViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset.exists():
-            serializer = self.get_serializer(queryset, many=True)
-            return Response({"citas": serializer.data})  # Empaqueta los resultados en una clave "citas"
+            cita = queryset.first()  # Devolver solo el primer objeto
+            serializer = self.get_serializer(cita)
+            return Response(serializer.data)
         return Response({"detail": "No se encontró ninguna cita."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, *args, **kwargs):

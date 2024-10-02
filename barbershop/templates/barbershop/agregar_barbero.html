@@ -1,0 +1,13 @@
+{% extends 'barbershop/base.html' %}
+{% block title %}Agregar Barbero - Barber Face{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Agregar Barbero</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="{% url 'barberos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

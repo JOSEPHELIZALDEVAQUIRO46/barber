@@ -1,33 +1,41 @@
 {% extends 'barbershop/base.html' %}
-
 {% block title %}Barberías - Barber Face{% endblock %}
-
 {% block content %}
-<h1 class="mt-4">Barberías</h1>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for barberia in barberias %}
-        <tr>
-            <td>{{ barberia.nombre }}</td>
-            <td>{{ barberia.direccion }}</td>
-            <td>{{ barberia.telefono }}</td>
-            <td>
-                <a href="#" class="btn btn-sm btn-primary">Editar</a>
-                <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<a href="#" class="btn btn-success">Añadir Barbería</a>
+<div class="container py-4">
+    <h1 class="mb-4">Barberías</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Logo</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for barberia in barberias %}
+            <tr>
+                <td>
+                    {% if barberia.imagen_logo %}
+                        <img src="{{ barberia.imagen_logo.url }}" alt="{{ barberia.nombre }}" class="img-thumbnail" style="max-width: 100px;">
+                    {% else %}
+                        <span class="text-muted">Sin logo</span>
+                    {% endif %}
+                </td>
+                <td>{{ barberia.nombre }}</td>
+                <td>{{ barberia.direccion }}</td>
+                <td>{{ barberia.telefono }}</td>
+                <td>
+                    <a href="{% url 'editar_barberia' barberia.id %}" class="btn btn-sm btn-primary">Editar</a>
+                    <a href="{% url 'eliminar_barberia' barberia.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'agregar_barberia' %}" class="btn btn-success">Añadir Barbería</a>
+</div>
 
 <style>
     .card {
