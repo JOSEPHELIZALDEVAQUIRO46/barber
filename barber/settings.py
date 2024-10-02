@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project like this: BASE_DIR / 'subdir'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -130,10 +130,11 @@ USE_TZ = True
 STATIC_URL = '/staticfiles/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'barber/staticfiles'),  #
+    os.path.join(BASE_DIR, 'barber/staticfiles'),  
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'barber/staticfiles')
+
 
 
 # Default primary key field type
