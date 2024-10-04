@@ -17,20 +17,20 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.views import LogoutView
-from django.urls import reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views 
+from barbershop import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path('', include('barbershop.urls')),
-    path('logout/', LogoutView.as_view(next_page=reverse_lazy('login')), name='logout'),
     path('api/', include('barbershop.api_urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

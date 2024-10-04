@@ -1,11 +1,48 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.utils import timezone
-from .forms import (UserUpdateForm, ProfileUpdateForm, CustomPasswordChangeForm, ContabilidadForm, CatalogoCorteForm, CitaForm, BarberoForm, ServicioForm, PromocionForm, BarberiaForm)
-from .models import Contabilidad, CatalogoCortes, Cita, Barbero, Servicio, Promociones, Barberia
+from django.views.decorators.http import require_POST
+from django.views.decorators.cache import never_cache
+from .forms import (UserUpdateForm, ProfileUpdateForm, CustomPasswordChangeForm, 
+                    ContabilidadForm, CatalogoCorteForm, CitaForm, BarberoForm, 
+                    ServicioForm, PromocionForm, BarberiaForm)
+from .models import (Contabilidad, CatalogoCortes, Cita, Barbero, Servicio, 
+                     Promociones, Barberia)
+
+
+def home(request):
+    if request.user.is_authenticated:
+        return redirect('barberias')
+    return render(request, 'barbershop/home.html')
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('barberias')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            request.session['is_valid'] = True
+            return redirect('barberias')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos.')
+    return render(request, 'barbershop/login.html')
+
+@require_POST
+@never_cache
+@login_required
+def logout_view(request):
+    logout(request)
+    response = redirect('home')
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
 
 @login_required
 def profile(request):
@@ -42,18 +79,8 @@ def change_password(request):
         form = CustomPasswordChangeForm(request.user)
     return render(request, 'barbershop/change_password.html', {'form': form})
 
-def home(request):
-    return render(request, 'barbershop/home.html')
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('barberias')
-    return render(request, 'barbershop/login.html')
+
 
 @login_required
 def barberias(request):
