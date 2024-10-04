@@ -135,7 +135,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'barbershop/static'),  
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'barber/staticfiles')
+SSTATIC_ROOT = '/barber/barber/staticfiles/'
+
 
 
 
