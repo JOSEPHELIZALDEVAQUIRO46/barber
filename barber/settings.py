@@ -132,11 +132,10 @@ USE_TZ = True
 STATIC_URL = '/staticfiles/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'barbershop/static'),  
+    os.path.join(BASE_DIR, 'barbershop/staticfiles'),  
 ]
 
-SSTATIC_ROOT = '/barber/barber/staticfiles/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'barber/staticfiles')
 
 
 
