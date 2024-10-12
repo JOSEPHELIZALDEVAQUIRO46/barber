@@ -10,27 +10,30 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --sidebar-width: 250px;
+            --primary-color: #343a40;
+            --secondary-color: #495057;
+            --text-color: #ffffff;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
         .card {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             border: none;
             border-radius: 0.5rem;
         }
         .card-title {
-            color: #343a40;
+            color: var(--primary-color);
             font-weight: bold;
         }
         .table {
-            color: #343a40;
+            color: var(--primary-color);
         }
         .table thead th {
             border-top: none;
-        }
-        :root {
-            --sidebar-width: 250px;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden;
         }
         .sidebar {
             width: var(--sidebar-width);
@@ -38,9 +41,9 @@
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #343a40;
+            background-color: var(--primary-color);
             padding-top: 20px;
-            color: white;
+            color: var(--text-color);
             transition: transform 0.3s ease-in-out;
             z-index: 1000;
             transform: translateX(-100%);
@@ -57,20 +60,9 @@
         .content.sidebar-active, .navbar.sidebar-active {
             margin-left: var(--sidebar-width);
         }
-        @media (min-width: 769px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .content, .navbar {
-                margin-left: 0;
-            }
-            .content.sidebar-active, .navbar.sidebar-active {
-                margin-left: var(--sidebar-width);
-            }
-        }
         .user-profile {
             padding: 20px;
-            border-bottom: 1px solid #495057;
+            border-bottom: 1px solid var(--secondary-color);
         }
         .user-profile img {
             width: 80px;
@@ -87,25 +79,44 @@
             padding: 10px 15px;
         }
         .profile-dropdown:hover, .profile-dropdown:focus {
-            color: white;
-            background-color: #495057;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
         }
         .profile-menu {
-            background-color: #343a40;
+            background-color: var(--primary-color);
             border: none;
         }
         .profile-menu .dropdown-item {
             color: #adb5bd;
         }
         .profile-menu .dropdown-item:hover, .profile-menu .dropdown-item:focus {
-            color: white;
-            background-color: #495057;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
         }
         .sidebar .nav-link {
-            color: white; 
+            color: var(--text-color);
+            padding: 10px 15px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: var(--secondary-color);
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+            }
+            .content.sidebar-active, .navbar.sidebar-active {
+                margin-left: 0;
+            }
+            .user-profile img {
+                width: 60px;
+                height: 60px;
+            }
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
         }
     </style>
-
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -217,6 +228,15 @@
                 const clickedOutsideSidebar = !sidebar.contains(event.target) && !sidebarToggle.contains(event.target);
                 if (isSmallScreen && sidebar.classList.contains('active') && clickedOutsideSidebar) {
                     toggleSidebar();
+                }
+            });
+
+            // Ajusta el sidebar al cambiar el tamaño de la ventana
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 769) {
+                    sidebar.classList.remove('active');
+                    content.classList.remove('sidebar-active');
+                    navbar.classList.remove('sidebar-active');
                 }
             });
         });
