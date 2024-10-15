@@ -84,12 +84,16 @@ class PromocionForm(forms.ModelForm):
 class PromocionForm(forms.ModelForm):
     class Meta:
         model = Promociones
-        fields = ['titulo', 'descripcion', 'fecha_inicio', 'fecha_fin', 'descuento', 'imagen']
+        fields = ['titulo', 'descripcion', 'fecha_inicio', 'fecha_fin', 'descuento', 'imagen','barberia']
 
 class BarberoForm(forms.ModelForm):
     class Meta:
         model = Barbero
-        fields = ['nombre_completo', 'barberia', 'especialidad', 'imagen_perfil']
+        fields = ['usuario', 'barberia', 'nombre_completo', 'anos_experiencia', 'especialidad', 'disponibilidad', 'imagen_perfil', 'certificado_profesional']
+        widgets = {
+            'disponibilidad': forms.Textarea(attrs={'rows': 3}),
+            'anos_experiencia': forms.NumberInput(attrs={'min': 0}),
+        }
 
 class BarberiaForm(forms.ModelForm):
     class Meta:
@@ -99,7 +103,7 @@ class BarberiaForm(forms.ModelForm):
 class ServicioForm(forms.ModelForm):
     class Meta:
         model = Servicio
-        fields = ['nombre', 'descripcion', 'precio', 'imagen']
+        fields = ['nombre', 'descripcion', 'precio', 'imagen', 'duracion_estimada']
 
 class BarberiaForm(forms.ModelForm):
     class Meta:

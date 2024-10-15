@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container-fluid py-4">
-    <h1 class="mb-4">Contabilidad</h1>
+    <h1 class="mb-4 text-center">Contabilidad</h1>
     {% if messages %}
     <div class="messages">
         {% for message in messages %}
@@ -81,7 +81,7 @@
     window.chartData = {
     labels: {{ labels|safe }},
     ingresos: {{ ingresos|safe }},
-    gastos: {{ gastos|safe }},
+    gastos: {{ gastos|safe }}, 
     beneficios: {{ beneficios|safe }}
 };
 

@@ -1,0 +1,52 @@
+{% extends 'barbershop/base.html' %}
+{% block title %}Catálogo de Cortes - Barber Face{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4 text-center">Catálogo de Cortes</h1>
+    <div class="card shadow-lg rounded-lg overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="py-3 px-4">Imágenes</th>
+                            <th class="py-3 px-4">Estilo</th>
+                            <th class="py-3 px-4">Barbero</th>
+                            <th class="py-3 px-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for corte in cortes %}
+                        <tr>
+                            <td class="py-3 px-4">
+                                <div class="d-flex">
+                                    {% if corte.imagen1 %}
+                                        <img src="{{ corte.imagen1.url }}" alt="{{ corte.nombre_estilo }} - Imagen 1" class="img-thumbnail me-2" style="max-width: 100px; max-height: 100px;">
+                                    {% else %}
+                                        <span class="text-muted me-2">Sin imagen 1</span>
+                                    {% endif %}
+                                    {% if corte.imagen2 %}
+                                        <img src="{{ corte.imagen2.url }}" alt="{{ corte.nombre_estilo }} - Imagen 2" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                    {% else %}
+                                        <span class="text-muted">Sin imagen 2</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">{{ corte.nombre_estilo }}</td>
+                            <td class="py-3 px-4">{{ corte.barbero.nombre_completo }}</td>
+                            <td class="py-3 px-4">
+                                <a href="{% url 'editar_corte' corte.id %}" class="btn btn-sm btn-primary me-2">Editar</a>
+                                <a href="{% url 'eliminar_corte' corte.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 text-center">
+        <a href="{% url 'agregar_corte' %}" class="btn btn-success">Añadir Corte</a>
+    </div>
+</div>
+{% endblock %}

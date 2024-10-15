@@ -159,7 +159,7 @@
         <ul class="nav flex-column mt-4">
             <li class="nav-item">
                 <a class="nav-link {% if request.resolver_match.url_name == 'barberias' %}active{% endif %}" href="{% url 'barberias' %}">
-                    <i class="fas fa-store me-2"></i> Barberías
+                    <i class="fas fa-store me-2"></i> Barbería
                 </a>
             </li>
             <li class="nav-item">
@@ -180,6 +180,11 @@
             <li class="nav-item">
                 <a class="nav-link {% if request.resolver_match.url_name == 'promociones' %}active{% endif %}" href="{% url 'promociones' %}">
                     <i class="fas fa-percentage me-2"></i> Promociones
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'catalogo_cortes' %}active{% endif %}" href="{% url 'catalogo_cortes' %}">
+                    <i class="fas fa-book me-2"></i> Catálogo de Cortes
                 </a>
             </li>
         </ul>

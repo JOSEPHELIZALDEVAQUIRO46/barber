@@ -2,136 +2,107 @@
 {% block title %}Promociones - Barber Face{% endblock %}
 {% block content %}
 <div class="container py-4">
-    <h1 class="mb-4">Promociones</h1>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Imagen</th>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Fecha de inicio</th>
-                <th>Fecha de fin</th>
-                <th>Descuento</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for promocion in promociones %}
-            <tr>
-                <td>
-                    {% if promocion.imagen %}
-                        <img src="{{ promocion.imagen.url }}" alt="{{ promocion.titulo }}" class="img-thumbnail" style="max-width: 100px;">
-                    {% else %}
-                        <span class="text-muted">Sin imagen</span>
-                    {% endif %}
-                </td>
-                <td>{{ promocion.titulo }}</td>
-                <td>{{ promocion.descripcion }}</td>
-                <td>{{ promocion.fecha_inicio }}</td>
-                <td>{{ promocion.fecha_fin }}</td>
-                <td>{{ promocion.descuento }}%</td>
-                <td>
-                    <a href="{% url 'editar_promocion' promocion.id %}" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="{% url 'eliminar_promocion' promocion.id %}" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'agregar_promocion' %}" class="btn btn-success">Añadir Promoción</a>
+    <h1 class="mb-4 text-center">Promociones</h1>
+    <div class="card shadow-lg rounded-lg overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="py-3 px-4">Imagen</th>
+                            <th class="py-3 px-4">Título</th>
+                            <th class="py-3 px-4">Descripción</th>
+                            <th class="py-3 px-4">Barbería</th>
+                            <th class="py-3 px-4">Fecha de inicio</th>
+                            <th class="py-3 px-4">Fecha de fin</th>
+                            <th class="py-3 px-4">Descuento</th>
+                            <th class="py-3 px-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for promocion in promociones %}
+                        <tr>
+                            <td class="py-3 px-4">
+                                {% if promocion.imagen %}
+                                    <img src="{{ promocion.imagen.url }}" alt="{{ promocion.titulo }}" class="img-thumbnail" style="max-width: 80px; max-height: 80px;">
+                                {% else %}
+                                    <span class="text-muted">Sin imagen</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3 px-4">{{ promocion.titulo }}</td>
+                            <td class="py-3 px-4">{{ promocion.descripcion }}</td>
+                            <td class="py-3 px-4">{{ promocion.barberia.nombre }}</td>
+                            <td class="py-3 px-4">{{ promocion.fecha_inicio }}</td>
+                            <td class="py-3 px-4">{{ promocion.fecha_fin }}</td>
+                            <td class="py-3 px-4">{{ promocion.descuento }}%</td>
+                            <td class="py-3 px-4">
+                                <a href="{% url 'editar_promocion' promocion.id %}" class="btn btn-sm btn-primary me-2">Editar</a>
+                                <a href="{% url 'eliminar_promocion' promocion.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 text-center">
+        <a href="{% url 'agregar_promocion' %}" class="btn btn-success">Añadir Promoción</a>
+    </div>
 </div>
 
 <style>
     .card {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         border: none;
-        border-radius: 0.5rem;
+        border-radius: 15px;
+        transition: all 0.3s ease;
     }
-    .card-title {
-        color: #343a40;
-        font-weight: bold;
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
     .table {
         color: #343a40;
+        margin-bottom: 0;
     }
     .table thead th {
         border-top: none;
+        border-bottom: 2px solid #dee2e6;
     }
-    :root {
-        --sidebar-width: 250px;
+    .table tbody tr:last-child td {
+        border-bottom: none;
     }
-    body {
-        font-family: 'Arial', sans-serif;
-        overflow-x: hidden;
+    .btn {
+        border-radius: 20px;
+        padding: 0.25rem 0.75rem;
+        transition: all 0.3s ease;
     }
-    .sidebar {
-        width: var(--sidebar-width);
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: #343a40;
-        padding-top: 20px;
-        color: white;
-        transition: transform 0.3s ease-in-out;
-        z-index: 1000;
-        transform: translateX(-100%);
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
     }
-    .sidebar.active {
-        transform: translateX(0);
+    .img-thumbnail {
+        transition: transform 0.3s ease;
     }
-    .content {
-        transition: margin-left 0.3s ease-in-out;
+    .img-thumbnail:hover {
+        transform: scale(1.1);
     }
-    .navbar {
-        transition: margin-left 0.3s ease-in-out;
-    }
-    .content.sidebar-active, .navbar.sidebar-active {
-        margin-left: var(--sidebar-width);
-    }
-    @media (min-width: 769px) {
-        .sidebar {
-            transform: translateX(-100%);
+    @media (max-width: 992px) {
+        .table-responsive {
+            overflow-x: auto;
         }
-        .content, .navbar {
-            margin-left: 0;
-        }
-        .content.sidebar-active, .navbar.sidebar-active {
-            margin-left: var(--sidebar-width);
+        .table {
+            min-width: 1000px;
         }
     }
-    .user-profile {
-        padding: 20px;
-        border-bottom: 1px solid #495057;
-    }
-    .user-profile img {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-    .profile-dropdown {
-        background-color: transparent;
-        border: none;
-        color: #adb5bd;
-        text-align: left;
-        width: 100%;
-        padding: 10px 15px;
-    }
-    .profile-dropdown:hover, .profile-dropdown:focus {
-        color: white;
-        background-color: #495057;
-    }
-    .profile-menu {
-        background-color: #343a40;
-        border: none;
-    }
-    .profile-menu .dropdown-item {
-        color: #adb5bd;
-    }
-    .profile-menu .dropdown-item:hover, .profile-menu .dropdown-item:focus {
-        color: white;
-        background-color: #495057;
+    @media (max-width: 768px) {
+        .container {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .card {
+            border-radius: 10px;
+        }
     }
 </style>
 {% endblock %}

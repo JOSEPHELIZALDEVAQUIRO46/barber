@@ -1,0 +1,19 @@
+{% extends 'barbershop/base.html' %}
+{% block title %}Eliminar Corte - Barber Face{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4 text-center">Eliminar Corte</h1>
+    <div class="card shadow-lg rounded-lg overflow-hidden">
+        <div class="card-body p-4">
+            <p class="text-center">¿Estás seguro de que deseas eliminar el corte "{{ corte.nombre_estilo }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-danger me-2">Sí, Eliminar</button>
+                    <a href="{% url 'catalogo_cortes' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

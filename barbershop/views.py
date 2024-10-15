@@ -275,27 +275,39 @@ def promociones(request):
 @login_required
 def catalogo_cortes(request):
     cortes = CatalogoCortes.objects.all()
+    return render(request, 'barbershop/catalogo_cortes.html', {'cortes': cortes})
+
+@login_required
+def agregar_corte(request):
     if request.method == 'POST':
         form = CatalogoCorteForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Nuevo corte agregado al catálogo.')
+            messages.success(request, 'Corte agregado exitosamente.')
             return redirect('catalogo_cortes')
     else:
         form = CatalogoCorteForm()
-    
-    context = {
-        'cortes': cortes,
-        'form': form,
-    }
-    return render(request, 'barbershop/catalogo_cortes.html', context)
+    return render(request, 'barbershop/agregar_corte.html', {'form': form})
+
+@login_required
+def editar_corte(request, pk):
+    corte = get_object_or_404(CatalogoCortes, pk=pk)
+    if request.method == 'POST':
+        form = CatalogoCorteForm(request.POST, request.FILES, instance=corte)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Corte actualizado exitosamente.')
+            return redirect('catalogo_cortes')
+    else:
+        form = CatalogoCorteForm(instance=corte)
+    return render(request, 'barbershop/editar_corte.html', {'form': form, 'corte': corte})
 
 @login_required
 def eliminar_corte(request, pk):
     corte = get_object_or_404(CatalogoCortes, pk=pk)
     if request.method == 'POST':
         corte.delete()
-        messages.success(request, 'Corte eliminado del catálogo.')
+        messages.success(request, 'Corte eliminado exitosamente.')
         return redirect('catalogo_cortes')
     return render(request, 'barbershop/eliminar_corte.html', {'corte': corte})
 

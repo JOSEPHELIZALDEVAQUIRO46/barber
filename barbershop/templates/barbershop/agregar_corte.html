@@ -1,0 +1,44 @@
+{% extends 'barbershop/base.html' %}
+{% block title %}Agregar Corte - Barber Face{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4 text-center">Agregar Corte</h1>
+    <div class="card shadow-lg rounded-lg overflow-hidden">
+        <div class="card-body p-4">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.nombre_estilo.id_for_label }}" class="form-label">Nombre del Estilo</label>
+                            {{ form.nombre_estilo }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.barbero.id_for_label }}" class="form-label">Barbero</label>
+                            {{ form.barbero }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.imagen1.id_for_label }}" class="form-label">Imagen 1</label>
+                            {{ form.imagen1 }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.imagen2.id_for_label }}" class="form-label">Imagen 2 (Opcional)</label>
+                            {{ form.imagen2 }}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <button type="submit" class="btn btn-success me-2">Guardar</button>
+                    <a href="{% url 'catalogo_cortes' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

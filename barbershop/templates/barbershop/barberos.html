@@ -1,134 +1,145 @@
 {% extends 'barbershop/base.html' %}
 {% block title %}Barberos - Barber Face{% endblock %}
 {% block content %}
-<div class="container py-4">
-    <h1 class="mb-4">Barberos</h1>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Foto</th>
-                <th>Nombre</th>
-                <th>Barbería</th>
-                <th>Especialidad</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for barbero in barberos %}
-            <tr>
-                <td>
-                    {% if barbero.imagen_perfil %}
-                        <img src="{{ barbero.imagen_perfil.url }}" alt="{{ barbero.nombre_completo }}" class="img-thumbnail" style="max-width: 100px;">
-                    {% else %}
-                        <span class="text-muted">Sin foto</span>
-                    {% endif %}
-                </td>
-                <td>{{ barbero.nombre_completo }}</td>
-                <td>{{ barbero.barberia.nombre }}</td>
-                <td>{{ barbero.especialidad }}</td>
-                <td>
-                    <a href="{% url 'editar_barbero' barbero.id %}" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="{% url 'eliminar_barbero' barbero.id %}" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'agregar_barbero' %}" class="btn btn-success">Añadir Barbero</a>
+<div class="container-fluid py-4">
+    <h1 class="mb-4 text-center">Barberos</h1>
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th>Usuario</th>
+                            <th>Barbería</th>
+                            <th>Especialidad</th>
+                            <th>Disponibilidad</th>
+                            <th>Años de Experiencia</th>
+                            <th>Certificado Profesional</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for barbero in barberos %}
+                        <tr>
+                            <td>
+                                <div class="profile-pic-container">
+                                    {% if barbero.imagen_perfil %}
+                                        <img src="{{ barbero.imagen_perfil.url }}" alt="{{ barbero.nombre_completo }}" class="profile-pic">
+                                    {% else %}
+                                        <div class="profile-pic-placeholder">
+                                            {{ barbero.nombre_completo|make_list|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>{{ barbero.nombre_completo }}</td>
+                            <td>{{ barbero.usuario.username }}</td>
+                            <td>{{ barbero.barberia.nombre }}</td>
+                            <td>{{ barbero.especialidad }}</td>
+                            <td>{{ barbero.disponibilidad }}</td>
+                            <td>{{ barbero.anos_experiencia }}</td>
+                            <td>
+                                {% if barbero.certificado_profesional %}
+                                    <img src="{{ barbero.certificado_profesional.url }}" alt="Certificado de {{ barbero.nombre_completo }}" class="certificate-thumbnail" data-bs-toggle="modal" data-bs-target="#certificateModal{{ barbero.id }}">
+                                    
+                                    <!-- Modal for certificate -->
+                                    <div class="modal fade" id="certificateModal{{ barbero.id }}" tabindex="-1" aria-labelledby="certificateModalLabel{{ barbero.id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="certificateModalLabel{{ barbero.id }}">Certificado de {{ barbero.nombre_completo }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <img src="{{ barbero.certificado_profesional.url }}" alt="Certificado de {{ barbero.nombre_completo }}" class="img-fluid">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted">No disponible</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'editar_barbero' barbero.id %}" class="btn btn-sm btn-primary me-1">Editar</a>
+                                <a href="{% url 'eliminar_barbero' barbero.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a href="{% url 'agregar_barbero' %}" class="btn btn-success">Añadir Barbero</a>
+    </div>
 </div>
 
 <style>
     .card {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         border: none;
         border-radius: 0.5rem;
-    }
-    .card-title {
-        color: #343a40;
-        font-weight: bold;
+        overflow: hidden;
     }
     .table {
-        color: #343a40;
+        margin-bottom: 0;
+    }
+    .table th, .table td {
+        vertical-align: middle;
     }
     .table thead th {
         border-top: none;
+        border-bottom: 2px solid #dee2e6;
     }
-    :root {
-        --sidebar-width: 250px;
+    .btn {
+        border-radius: 0.25rem;
     }
-    body {
-        font-family: 'Arial', sans-serif;
-        overflow-x: hidden;
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
     }
-    .sidebar {
-        width: var(--sidebar-width);
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: #343a40;
-        padding-top: 20px;
-        color: white;
-        transition: transform 0.3s ease-in-out;
-        z-index: 1000;
-        transform: translateX(-100%);
-    }
-    .sidebar.active {
-        transform: translateX(0);
-    }
-    .content {
-        transition: margin-left 0.3s ease-in-out;
-    }
-    .navbar {
-        transition: margin-left 0.3s ease-in-out;
-    }
-    .content.sidebar-active, .navbar.sidebar-active {
-        margin-left: var(--sidebar-width);
-    }
-    @media (min-width: 769px) {
-        .sidebar {
-            transform: translateX(-100%);
-        }
-        .content, .navbar {
-            margin-left: 0;
-        }
-        .content.sidebar-active, .navbar.sidebar-active {
-            margin-left: var(--sidebar-width);
-        }
-    }
-    .user-profile {
-        padding: 20px;
-        border-bottom: 1px solid #495057;
-    }
-    .user-profile img {
-        width: 80px;
-        height: 80px;
+    .profile-pic-container {
+        width: 60px;
+        height: 60px;
+        overflow: hidden;
         border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f0;
+    }
+    .profile-pic {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
     }
-    .profile-dropdown {
-        background-color: transparent;
-        border: none;
-        color: #adb5bd;
-        text-align: left;
+    .profile-pic-placeholder {
         width: 100%;
-        padding: 10px 15px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #007bff;
     }
-    .profile-dropdown:hover, .profile-dropdown:focus {
-        color: white;
-        background-color: #495057;
+    .certificate-thumbnail {
+        max-width: 100px;
+        max-height: 100px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
     }
-    .profile-menu {
-        background-color: #343a40;
-        border: none;
+    .certificate-thumbnail:hover {
+        transform: scale(1.1);
     }
-    .profile-menu .dropdown-item {
-        color: #adb5bd;
-    }
-    .profile-menu .dropdown-item:hover, .profile-menu .dropdown-item:focus {
-        color: white;
-        background-color: #495057;
+    @media (max-width: 768px) {
+        .table-responsive {
+            overflow-x: auto;
+        }
     }
 </style>
-    
 {% endblock %}
